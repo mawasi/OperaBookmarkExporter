@@ -69,28 +69,6 @@ namespace OperaBookMarkExporter {
 			Parent = parent;
 		}
 
-		public bool Load(string path)
-		{
-			bool result = false;
-
-//			string test = "D:\\data\\program\\OperaBookMarkExporter\\data\\source\\bookmark.adr";
-			string test = "D:\\program\\OperaBookMarkExporter\\data\\source\\bookmark.adr";
-
-			StreamReader reader = new StreamReader(path, Encoding.GetEncoding("utf-8"));
-
-			string text = reader.ReadToEnd();
-
-			System.Windows.Application.Current.Dispatcher.BeginInvoke(new OneArgDelegate<string>(Parent.WriteText), text);
-
-			reader.Close();
-
-			// #FOLDERを探す
-			// 
-
-
-			return result;
-		}
-
 		/// <summary>
 		/// IEブックマークにコンバート
 		/// </summary>

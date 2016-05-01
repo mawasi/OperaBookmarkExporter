@@ -24,7 +24,7 @@ namespace OperaBookMarkExporter {
 
 		public void WriteText(string text)
 		{
-			log.Text = text;
+			Status.Text = text;
 		}
 
 		public void ButtonEnable(bool isEnable)
@@ -40,6 +40,11 @@ namespace OperaBookMarkExporter {
 			SourcePath.Text = "D:\\program\\OperaBookMarkExporter\\data\\source\\bookmark.adr";
 		}
 
+		/// <summary>
+		/// 変換開始
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private async void Button_Click(object sender, RoutedEventArgs e) {
 			await mOperaBookMark.ConvertAsync(SourcePath.Text);
 		}
