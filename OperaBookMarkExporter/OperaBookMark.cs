@@ -60,10 +60,6 @@ namespace OperaBookMarkExporter {
 
 		MODE mMode = MODE.eNone;
 
-		// 出力ルートパス
-//		string OutputRootPath = "D:\\data\\program\\OperaBookMarkExporter\\data\\";
-		string OutputRootPath = "D:\\program\\OperaBookMarkExporter\\data\\";
-
 		public OperaBookMark(MainWindow parent)
 		{
 			Parent = parent;
@@ -74,13 +70,13 @@ namespace OperaBookMarkExporter {
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
-		public async Task<bool> ConvertAsync(string path)
+		public async Task<bool> ConvertAsync(string path, string outputpath)
 		{
 
 			bool result = false;
 
 			Func<bool> ConvertAsyncJob = () => {
-
+				// ボタンの無効化
 				System.Windows.Application.Current.Dispatcher.BeginInvoke(new OneArgDelegate<bool>(Parent.ButtonEnable), false);
 
 				StreamReader reader = new StreamReader(path, Encoding.GetEncoding("utf-8"));
@@ -98,7 +94,7 @@ namespace OperaBookMarkExporter {
 
 
 				// エクスポート
-				ExportIEBookMark(Root);
+				ExportIEBookMark(Root, outputpath);
 
 				System.Windows.Application.Current.Dispatcher.BeginInvoke(new OneArgDelegate<bool>(Parent.ButtonEnable), true);
 				System.Windows.Application.Current.Dispatcher.BeginInvoke(new OneArgDelegate<string>(Parent.WriteText), "完了");
@@ -189,14 +185,20 @@ namespace OperaBookMarkExporter {
 		}
 
 
-		void ExportIEBookMark(Folder root)
+		/// <summary>
+		/// エクスポート
+		/// </summary>
+		/// <param name="root"></param>
+		/// <param name="outputpath"></param>
+		void ExportIEBookMark(Folder root, string outputpath)
 		{
 			Folder CurrentFolder = root;
 
-			string folderPath = OutputRootPath + CurrentFolder.Name;
+			string folderPath = Path.Combine(outputpath, CurrentFolder.Name);
 			if(!Directory.Exists(folderPath)){
 				Directory.CreateDirectory(folderPath);
 			}
+			// 出力
 			OutPutIEBookMark(folderPath, CurrentFolder);
 
 		}
@@ -207,7 +209,11 @@ namespace OperaBookMarkExporter {
 // ショートカットファイルの作成
 // http://dobon.net/vb/dotnet/file/createshortcut.html
 
-
+		/// <summary>
+		/// 変換したやつ出力
+		/// </summary>
+		/// <param name="outputpath"></param>
+		/// <param name="current"></param>
 		void OutPutIEBookMark(string outputpath, Folder current)
 		{
 			// まず子フォルダがあるなら作ってどんどん潜っていく

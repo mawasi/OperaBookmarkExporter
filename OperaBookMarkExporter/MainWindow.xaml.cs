@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace OperaBookMarkExporter {
 	/// <summary>
@@ -36,8 +37,6 @@ namespace OperaBookMarkExporter {
 			InitializeComponent();
 			mOperaBookMark = new OperaBookMark(this);
 
-//			SourcePath.Text = "D:\\data\\program\\OperaBookMarkExporter\\data\\source\\bookmark.adr";
-			SourcePath.Text = "D:\\program\\OperaBookMarkExporter\\data\\source\\bookmark.adr";
 		}
 
 		/// <summary>
@@ -46,7 +45,29 @@ namespace OperaBookMarkExporter {
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private async void Button_Click(object sender, RoutedEventArgs e) {
-			await mOperaBookMark.ConvertAsync(SourcePath.Text);
+			await mOperaBookMark.ConvertAsync(SourcePath.Text, DestPath.Text);
+		}
+
+		private void SelectInputPath_Click(object sender, RoutedEventArgs e)
+		{
+			System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+//			ofd.FileName = "bookmark.adr";
+//			ofd.InitialDirectory = 
+			ofd.Filter = "OperaBookmark(*.adr)|";
+			ofd.Title = "ファイルを選択してください";
+			ofd.RestoreDirectory = true;
+			if(ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK){
+				SourcePath.Text = ofd.FileName;
+			}
+		}
+
+		private void SelectOutputPath_Click(object sender, RoutedEventArgs e)
+		{
+			System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+			fbd.Description = "出力先を選択してください";
+			if(fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK){
+				DestPath.Text = fbd.SelectedPath;
+			}
 		}
 	}
 }
